@@ -39,6 +39,7 @@ addEvent(document,'keydown',function(e){
       // case for D
       case 68:
         console.log('You pressed D');
+        animate_right_circle(20);
         break;
       // case for I
       case 73:
@@ -126,6 +127,7 @@ function sequence_1_part2(){
   }
 }
 
+// function to play animations on the images
 function animate (animation){
   // declare variable to store random number in
   var n;
@@ -173,4 +175,33 @@ function animate_left_circle(timing){
   }
   // set element to be invisible again
   document.getElementById('circle-left-animate').style.width = 'hidden';
+}
+
+function animate_right_circle(timing){
+  // set element to be visible
+  document.getElementById('circle-right-animate').style.visibility ='visible';
+  document.getElementById('circle-right-animate').style.opacity = 1;
+  //start for loop
+  for(var i=50; i >= 0; i--){
+    // set a small delay between each frame change
+    setTimeout(
+      (function(j){
+        return function(){
+          // adjusting size
+          document.getElementById('circle-right-animate').style.width =(j*2/100 * 300) + "px";
+
+          // opactiy adjustments
+          document.getElementById('circle-right-animate').style.opacity =-1*(j-100)*2;
+
+          // image marker adjustments
+          var width = document.getElementById('circle-right-animate').clientWidth;
+          var height = document.getElementById('circle-right-animate').clientHeight;
+          document.getElementById('circle-right-animate').style.marginLeft = -1 * width/2 + "px";
+          document.getElementById('circle-right-animate').style.marginTop = -1 * height/2 + "px";
+        }
+      })(i), (-1*(i-100) * timing)
+    );
+  }
+  // set element to be invisible again
+  document.getElementById('circle-right-animate').style.width = 'hidden';
 }
