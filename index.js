@@ -1,3 +1,8 @@
+// variables to see if a key is being held down
+var w_down = false;
+
+// start the first sequence
+setTimeout(sequence_1, 5000);
 
 // function to add an event listener to the whole page for key presses
 var addEvent = document.addEventListener ? function(target,type,action){
@@ -10,16 +15,12 @@ var addEvent = document.addEventListener ? function(target,type,action){
     }
 }
 
-// variables to see if a key is being held down
-var w_down = false;
-
-
 // add functionality for each key pressed (key down and key up)
 addEvent(document,'keydown',function(e){
     e = e || window.event;
     var key = e.which || e.keyCode;
-     console.log(key);
-     console.log(e);
+     //console.log(key);
+     //console.log(e);
     // switch case for which key was pressed
     switch (key) {
       // case for W
@@ -30,7 +31,7 @@ addEvent(document,'keydown',function(e){
       // case for A
       case 65:
         console.log('You pressed A');
-        sequence_1();
+        //sequence_1();
         break;
       // case for S
       case 83:
@@ -45,16 +46,16 @@ addEvent(document,'keydown',function(e){
       case 73:
         console.log('You pressed I');
         break;
-      // case for j
+      // case for J
       case 74:
         console.log('You pressed J');
         animate_left_circle();
         break;
-      // case for k
+      // case for K
       case 75:
         console.log('You pressed K');
         break;
-      // case for D
+      // case for L
       case 76:
         console.log('You pressed L');
         break;
@@ -89,15 +90,15 @@ addEvent(document,'keyup',function(e){
       case 73:
         console.log('You pressed I');
         break;
-      // case for j
+      // case for J
       case 74:
         console.log('You pressed J');
         break;
-      // case for k
+      // case for K
       case 75:
         console.log('You pressed K');
         break;
-      // case for D
+      // case for L
       case 76:
         console.log('You pressed L');
         break;
@@ -105,6 +106,7 @@ addEvent(document,'keyup',function(e){
 });
 
 function sequence_1(){
+  console.log('sequence started');
   // animate background
   // animate character
   // test for first input at specific moment
