@@ -1,0 +1,21 @@
+body {
+  background-color: #dee8f7;
+}
+
+.offscreen {
+  padding: 50px;
+}
+
+#game-frame1 {
+  width: 100%;
+  height: auto;
+  display: block;
+  position: absolute;
+}
+
+#game-frame2 {
+  width: 100%;
+  height: auto;
+  display: block;
+  position: absolute;
+}
