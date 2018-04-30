@@ -6,16 +6,22 @@ body {
   padding: 50px;
 }
 
+.frame {
+  position: relative;
+}
+
 #game-frame1 {
   width: 100%;
-  height: auto;
+  height: 810px;
   display: block;
   position: absolute;
 }
 
 #game-frame2 {
   width: 100%;
-  height: auto;
+  height: 810px;
+  top: 0;
+  left: 0;
   display: block;
   position: absolute;
 }
