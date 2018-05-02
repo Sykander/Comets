@@ -2,7 +2,7 @@
 var w_down = false, a_down =false, s_down = false, d_down = false, i_down =false, j_down=false,k_down=false,l_down=false;
 
 // start the first sequence
-setTimeout(sequence_1, 5000);
+ setTimeout(sequence_1, 1000);
 // animate('sequence1', 1, 19, 400);
 // function to add an event listener to the whole page for key presses
 var addEvent = document.addEventListener ? function(target,type,action){
@@ -126,7 +126,7 @@ function sequence_1(){
   animate_left_circle(40);
   document.getElementById('key-overlay-left').src="images/keyboard/(W)ASD.png";
 
-  setTimeout(alert('test for conditions in 2 seconds') , 2000);
+  setTimeout(alert('test for conditions') , 2000);
   // test for the player holding down the key
   for (var i = 0; i < 10; i++) {
     setTimeout(test_for , 2000 + i*10);
@@ -147,16 +147,12 @@ function sequence_1_part2(){
   // continue sequence 1 from here
   console.log('You won part 1');
   animate('sequence1', 5, 11, 400);
-  setTimeout( function() {
-    animate_left_circle(20)}
-     , 2400);
+  animate_left_circle(60);
   document.getElementById('key-overlay-left').src="images/keyboard/(W)ASD.png";
-  setTimeout( function() {
-    animate_right_circle(20)}
-     , 2400);
+  animate_right_circle(60);
   document.getElementById('key-overlay-right').src="images/keyboard/(W)ASD.png";
   // test for the player holding down the key
-  setTimeout(alert('test for condtions in 2.4 seconds') , 2400);
+  setTimeout(alert('test for condtions') , 2400);
   for (var i = 0; i < 100; i++) {
     setTimeout(test_for , 2400 + i*10);
   }
@@ -168,12 +164,34 @@ function sequence_1_part2(){
       passed = true;
     }
   }
-
 }
 
 function sequence_1_part3(){
   console.log('You won part 2');
   animate('sequence1', 11, 14, 400);
+  animate_left_circle(4)
+  document.getElementById('key-overlay-left').src="images/keyboard/WA(S)D.png";
+  animate_right_circle(4);
+  document.getElementById('key-overlay-right').src="images/keyboard/WA(S)D.png";
+  // test for the player holding down the key
+  debugger;
+  setTimeout(alert('test for condtions') , 200);
+  for (var i = 0; i < 100; i++) {
+    setTimeout(test_for , 200 + i*10);
+  }
+
+  var passed = false;
+  function test_for(){
+    if(s_down == true && k_down == true && passed == false){
+      sequence_1_part4();
+      passed = true;
+    }
+  }
+}
+
+function sequence_1_part4(){
+  console.log('You won part 3');
+  animate('sequence1', 14, 19, 400);
 }
 
 // function to play animations on the images
