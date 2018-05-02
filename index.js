@@ -126,7 +126,7 @@ function sequence_1(){
   animate_left_circle(40);
   document.getElementById('key-overlay-left').src="images/keyboard/(W)ASD.png";
 
-  setTimeout(alert('test for conditions') , 2000);
+  // setTimeout(alert('test for conditions') , 2000);
   // test for the player holding down the key
   for (var i = 0; i < 10; i++) {
     setTimeout(test_for , 2000 + i*10);
@@ -152,7 +152,7 @@ function sequence_1_part2(){
   animate_right_circle(60);
   document.getElementById('key-overlay-right').src="images/keyboard/(W)ASD.png";
   // test for the player holding down the key
-  setTimeout(alert('test for condtions') , 2400);
+  // setTimeout(alert('test for condtions') , 2400);
   for (var i = 0; i < 100; i++) {
     setTimeout(test_for , 2400 + i*10);
   }
@@ -174,8 +174,7 @@ function sequence_1_part3(){
   animate_right_circle(4);
   document.getElementById('key-overlay-right').src="images/keyboard/WA(S)D.png";
   // test for the player holding down the key
-  debugger;
-  setTimeout(alert('test for condtions') , 200);
+  // setTimeout(alert('test for condtions') , 200);
   for (var i = 0; i < 100; i++) {
     setTimeout(test_for , 200 + i*10);
   }
