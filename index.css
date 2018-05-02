@@ -27,13 +27,13 @@ body {
 }
 
 #key-overlay-left {
-  width: 10%;
+  width: 20%;
   height: auto;
-  top: 700px;
+  top: 570px;
   left: 10%;
   display: block;
   position: absolute;
-  margin-left: -5%;
+  margin-left: -10%;
 }
 
 #circle-left {
@@ -61,13 +61,13 @@ body {
 }
 
 #key-overlay-right {
-  width: 10%;
+  width: 20%;
   height: auto;
-  top: 700px;
+  top: 570px;
   left: 90%;
   display: block;
   position: absolute;
-  margin-left: -5%;
+  margin-left: -10%;
 }
 
 #circle-right {
