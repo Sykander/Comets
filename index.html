@@ -29,42 +29,145 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-md-1 offscreen">
+        <div class="col-md-2 offscreen score_display">
+          <h1 id='score_display'>0</h1>
+          <h1 id='reset' onclick="resetFunction()">RESET</h1>
+          <h1 id='new_game' onclick="newGame()">START</h1>
+          <h1 id='meun' onclick="window.location.href='home.html' "=>MENU</h1>
+          <h1 id='message'></h1>
         </div>
-        <div class="col-md-10">
+        <div class="col-md-8">
           <div class="frame">
-            <img id='game-frame1' src="https://images.pexels.com/photos/248797/pexels-photo-248797.jpeg?auto=compress&cs=tinysrgb&h=350" alt="background-image">
-            <img id='game-frame2' src="" alt="foreground-image">
-            <img id='key-overlay-left' src="images/keyboard/WASD.png" alt="keyboard overlay display">
-            <img id='circle-left' src="images/circle.png" alt="circle to close onto keyboard overlay">
-            <img id='circle-left-animate' src="images/circle.png" alt="circle to close onto keyboard overlay">
-            <img id='key-overlay-right' src="images/keyboard/WASD.png" alt="keyboard overlay display">
-            <img id='circle-right' src="images/circle.png" alt="circle to close onto keyboard overlay">
-            <img id='circle-right-animate' src="images/circle.png" alt="circle to close onto keyboard overlay">
+            <table id ='game-frame'>
+              <tr>
+                <th class='spawn'></th>
+                <th class='spawn'></th>
+                <th class='spawn'></th>
+                <th class='spawn'></th>
+                <th class='spawn'></th>
+                <th class='spawn'></th>
+                <th class='spawn'></th>
+                <th class='spawn'></th>
+                <th class='spawn'></th>
+                <th class='spawn'></th>
+              </tr>
+              <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+              </tr>
+              <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+              </tr>
+              <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+              </tr>
+              <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+              </tr>
+              <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+              </tr>
+              <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+              </tr>
+              <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+              </tr>
+              <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+              </tr>
+              <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th id='player'></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+              </tr>
+            </table>
           </div>
         </div>
         <div class="col-md-1 offscreen">
         </div>
       </div>
     </div>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
-    <br>
   </body>
   <!-- Game script import -->
+
   <script src="index.js"></script>
 </html>

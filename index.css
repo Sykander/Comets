@@ -1,6 +1,19 @@
 body {
-  background-color: #dee8f7;
+  background-image: url(images/background.gif);
+  background-size: repeat;
 }
+
+.score_display{
+  color: #4d94ff;
+  font-family: impact;
+}
+
+th.block {
+   content:url(images/comet-ms-still.gif);
+   padding: 0px;
+   background-color: transparent;
+   display: inline-block;
+}​
 
 .offscreen {
   padding: 50px;
@@ -10,14 +23,7 @@ body {
   position: relative;
 }
 
-#game-frame1 {
-  width: 100%;
-  height: 810px;
-  display: block;
-  position: absolute;
-}
-
-#game-frame2 {
+#game-frame {
   width: 100%;
   height: 810px;
   top: 0;
@@ -26,74 +32,35 @@ body {
   position: absolute;
 }
 
-#key-overlay-left {
-  width: 20%;
-  height: auto;
-  top: 570px;
-  left: 10%;
-  display: block;
-  position: absolute;
-  margin-left: -10%;
-}
-
-#circle-left {
-  width: 200px;
-  height: auto;
-  top: 680px;
-  left: 10%;
-  display: block;
-  position: absolute;
-  margin-left: -5%;
-  margin-left: -100px;
-  margin-top: -100px;
-}
-
-#circle-left-animate {
-  width: 200px;
-  height: auto;
-  top: 680px;
-  left: 10%;
-  display: block;
-  position: absolute;
-  visibility: hidden;
-  margin-left: -100px;
-  margin-top: -100px;
-}
-
-#key-overlay-right {
-  width: 20%;
-  height: auto;
-  top: 570px;
-  left: 90%;
-  display: block;
-  position: absolute;
-  margin-left: -10%;
-}
-
-#circle-right {
-  width: 200px;
-  height: auto;
-  top: 680px;
-  left: 90%;
-  display: block;
-  position: absolute;
-  margin-left: -100px;
-  margin-top: -100px;
-}
-
-#circle-right-animate {
-  width: 200px;
-  height: auto;
-  top: 680px;
-  left: 90%;
-  display: block;
-  position: absolute;
-  visibility: hidden;
-  margin-left: -100px;
-  margin-top: -100px;
-}
-
 .game-image {
-  max-width: 100%;
+  max-width: 300px;
   max-height: 100%;
+  border-radius: 25px;
+  border-style: solid;
+  border-width: 2px;
+  border-color: white;
+}
+
+th, td {
+  content:url(images/empty-still.gif);
+  display: inline-block;
+}
+
+#player {
+  content:url(images/play-m.gif);
+  padding: 0px;
+  background-color: transparent;
+  display: inline-block;
+  margin-left: 9px;
+  margin-right: 9px;
+}
+
+.block {
+  background-color: red;
+}
+
+.homepage {
+  color: #4d94ff;
+  font-family: impact;
+  font-size: 25px;
 }

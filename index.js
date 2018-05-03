@@ -1,9 +1,3 @@
-// variables to see if a key is being held down
-var w_down = false, a_down =false, s_down = false, d_down = false, i_down =false, j_down=false,k_down=false,l_down=false;
-
-// start the first sequence
- setTimeout(sequence_1, 1000);
-// animate('sequence1', 1, 19, 400);
 // function to add an event listener to the whole page for key presses
 var addEvent = document.addEventListener ? function(target,type,action){
     if(target){
@@ -15,257 +9,301 @@ var addEvent = document.addEventListener ? function(target,type,action){
     }
 }
 
+function playTheme(){
+  var audio = new Audio('music/game_theme.flac');
+  audio.play();
+}
+
+// internal game array
+var board = new Array(10);
+for (var i = 0; i < board.length; i++) {
+  board[i] = new Array(10);
+  for (var j = 0; j < board[i].length; j++) {
+    board[i][j] = 0;
+  }
+}
+
+function resetFunction(){
+  // reset game Array
+  for (var i = 0; i < board.length; i++) {
+    for (var j = 0; j < board.length; j++) {
+      board[i][j] = 0;
+    }
+  }
+  // reset game board
+  drawToPage();
+  score_count =0;
+  difficulty = 0;
+  // place 10 in the board to represent the player
+  board[9][5].id = '10';
+  // draw the player to the table
+  var table = document.getElementById('game-frame').children[0].children;
+  var row = table[9].children;
+  row[5].id = 'player';
+  // reset page
+  document.getElementById('message').innerHTML = '';
+  reset = true;
+}
+
+// global variables
+var score_count = 0, player_alive=true,chance = 0.1, difficulty = 0, reset= false;
+
+// new game
+function newGame(){
+  // start a new game only if the game has just been reset
+  if(reset == true){
+    player_alive = true;
+    gameLoop();
+    reset = false;
+  }
+}
+
+// game loop - this runs repeatedly
+function gameLoop(){
+  if(player_alive == true){
+    drawToArray();
+    checkForDeath();
+    updateScore();
+    dropBlocks();
+    drawToPage();
+    incrementDificulty();
+    setTimeout(gameLoop, 300 - difficulty*150);
+  }
+}
+
+// increments difficulty whilst never surpassing 1
+function incrementDificulty(){
+  difficulty = difficulty + (1-difficulty)/1000;
+  chance = chance + (0.15-chance)/1000;
+}
+
+// function to check if the player is about to die
+function checkForDeath(){
+  // get player coordinates
+  var player = document.getElementById('player')
+  if(player){
+    // do nothing
+  }
+  else {
+    // end game
+    document.getElementById('message').innerHTML = 'YOU DIED';
+    player_alive = false;
+  }
+}
+
+// function to update the score
+function updateScore(){
+  // get new score
+  for (var i = 0; i < board.length; i++) {
+    if (board[9][i] == 1) {
+      score_count++;
+    }
+  }
+
+  // display the new score
+  var score_display = document.getElementById('score_display');
+  score_display.innerHTML = score_count;
+}
+
+// draws the page to the board array
+function drawToArray(){
+  // clear the array
+  for (var i = 0; i < board.length; i++) {
+    for (var j = 0; j < board.length; j++) {
+      board[i][j] = 0;
+    }
+  }
+  // get table from html page and add to array
+  var table = document.getElementById('game-frame').children[0].children;
+  for (var i = 0; i < table.length; i++) {
+    var row = table[i].children;
+    for (var j = 0; j < row.length; j++) {
+      if (row[j].classList.contains('block') ) {
+        board[i][j] = 1;
+      }
+      if (row[j].id == 'player') {
+        board[i][j] = 10;
+      }
+    }
+  }
+}
+
+// draws the board array to the page
+function drawToPage(){
+  // get table information
+  var table = document.getElementById('game-frame').children[0].children;
+
+  // clear the page
+  for (var i = 0; i < board.length; i++) {
+    var row = table[i].children;
+    for (var j = 0; j < row.length; j++) {
+      // console.log(table[i].rowIndex + " " + row[j].cellIndex);
+      row[j].classList.remove('block');
+      // console.log(row[i].classList);
+      row[j].id = '';
+    }
+  }
+
+  // draw to the page
+  // for all rows
+  for (var i = 0; i < board.length; i++) {
+    // console.log('row ' + i);
+    var row = table[i].children;
+    // for all columns
+    for (var j = 0; j < row.length; j++) {
+      // if it contains a block
+      if(board[i][j] == 1){
+        // console.log(table[i].rowIndex + " " + row[j].cellIndex);
+        row[j].classList.add('block');
+      }
+      // if it contains the player
+      if (board[i][j] == 10) {
+        row[j].id = 'player';
+      }
+    }
+  }
+}
+
+// drop blocks function
+// drops the blocks on the page
+function dropBlocks(){
+  // clear bottom row
+  for (var i = 0; i < board.length; i++) {
+    if (board[9][i] == 1) {
+      board[9][i] = 0;
+    }
+  }
+
+  // drop old blocks
+  for (var i = board.length-2; i >=0 ; i--) {
+    for (var j = 0; j < board.length; j++) {
+      if (board[i][j]==1) {
+        board[i+1][j] = 1;
+        board[i][j] = 0;
+      }
+    }
+  }
+
+  // spawn in new blocks
+  for (var i = 0; i < board.length; i++) {
+    var n = Math.random();
+    if (n < chance) {
+      board[0][i] = 1;
+    }
+  }
+}
+
 // add functionality for each key pressed (key down and key up)
-addEvent(document,'keydown',function(e){
+addEvent(document,'keydown',function(e) {
     e = e || window.event;
     var key = e.which || e.keyCode;
-     //console.log(key);
-     //console.log(e);
+    // console.log(key);
+    // console.log(e);
     // switch case for which key was pressed
     switch (key) {
       // case for W
       case 87:
         console.log('You pressed W');
-        w_down = true;
+        // getting player coordinates and adjusting them
+        var player = document.getElementById('player');
+        var x = player.cellIndex;
+        var y = player.parentElement.rowIndex;
+        y--;
+        if(y<=1) y = 1;
+
+        // get new coordinates
+        var table = document.getElementById('game-frame').children;
+        console.log(table);
+        var row = table[0].children[y].children;
+        console.log(row);
+        var col = row[x];
+
+        // if you can move into the square then do so
+        if(col.classList == ''){
+          player.id = '';
+          col.id = 'player';
+        }
         break;
       // case for A
       case 65:
         console.log('You pressed A');
-        a_down=true;
+
+        // getting player coordinates and adjusting them
+        var player = document.getElementById('player');
+        var x = player.cellIndex;
+        var y = player.parentElement.rowIndex;
+        x--;
+        if(x<=0) x = 0;
+
+        // get new coordinates
+        var table = document.getElementById('game-frame').children;
+        console.log(table);
+        var row = table[0].children[y].children;
+        console.log(row);
+        var col = row[x];
+
+        // if you can move into the square then do so
+        if(col.classList == ''){
+          player.id = '';
+          col.id = 'player';
+        }
         break;
       // case for S
       case 83:
         console.log('You pressed S');
-        s_down=true;
-        break;
+
+        // getting player coordinates and adjusting them
+        var player = document.getElementById('player');
+        var x = player.cellIndex;
+        var y = player.parentElement.rowIndex;
+        y++;
+        if(y>=9) y = 9;
+
+        // get new coordinates
+        var table = document.getElementById('game-frame').children;
+        console.log(table);
+        var row = table[0].children[y].children;
+        console.log(row);
+        var col = row[x];
+
+        // if you can move into the square then do so
+        if(col.classList == ''){
+          player.id = '';
+          col.id = 'player';
+        }
+      break;
       // case for D
       case 68:
         console.log('You pressed D');
-        d_down=true;
-        break;
-      // case for I
-      case 73:
-        console.log('You pressed I');
-        i_down=true;
-        break;
-      // case for J
-      case 74:
-        console.log('You pressed J');
-        j_down=true;
-        animate_left_circle();
-        break;
-      // case for K
-      case 75:
-        console.log('You pressed K');
-        k_down=true;
-        break;
-      // case for L
-      case 76:
-        console.log('You pressed L');
-        l_down=true;
-        break;
-    }
-});
 
-addEvent(document,'keyup',function(e){
-    e = e || window.event;
-    var key = e.which || e.keyCode;
-     //console.log(key);
-     //console.log(e);
-    // switch case for which key was pressed
-    switch (key) {
-      // case for W
-      case 87:
-        console.log('You released W');
-        w_down = false;
-        break;
-      // case for A
-      case 65:
-        console.log('You pressed A');
-        a_down = false;
-        break;
-      // case for S
-      case 83:
-        console.log('You pressed S');
-        s_down = false;
-        break;
-      // case for D
-      case 68:
-        console.log('You pressed D');
-        d_down = false;
-        break;
-      // case for I
-      case 73:
-        console.log('You pressed I');
-        i_down = false;
-        break;
-      // case for J
-      case 74:
-        console.log('You pressed J');
-        j_down = false;
-        break;
-      // case for K
-      case 75:
-        console.log('You pressed K');
-        k_down = false;
-        break;
-      // case for L
-      case 76:
-        console.log('You pressed L');
-        l_down = false;
-        break;
-    }
-});
+        // getting player coordinates and adjusting them
+        var player = document.getElementById('player');
+        var x = player.cellIndex;
+        var y = player.parentElement.rowIndex;
+        x++;
+        if(x>=9) x = 9;
 
-function sequence_1(){
-  // first sequence
-  // tests for ( W ) then ( W and I ) and then ( S and K )
+        // get new coordinates
+        var table = document.getElementById('game-frame').children;
+        console.log(table);
+        var row = table[0].children[y].children;
+        console.log(row);
+        var col = row[x];
 
-  console.log('sequence started');
-  animate('sequence1', 1, 5, 400);
-  animate_left_circle(40);
-  document.getElementById('key-overlay-left').src="images/keyboard/(W)ASD.png";
-
-  // setTimeout(alert('test for conditions') , 2000);
-  // test for the player holding down the key
-  for (var i = 0; i < 10; i++) {
-    setTimeout(test_for , 2000 + i*10);
-  }
-
-  var passed = false;
-  function test_for(){
-    if(w_down == true && passed == false){
-      document.getElementById('key-overlay-left').src="images/keyboard/WASD.png";
-      sequence_1_part2();
-      passed = true;
-
-    }
-  }
-}
-
-function sequence_1_part2(){
-  // continue sequence 1 from here
-  console.log('You won part 1');
-  animate('sequence1', 5, 11, 400);
-  animate_left_circle(60);
-  document.getElementById('key-overlay-left').src="images/keyboard/(W)ASD.png";
-  animate_right_circle(60);
-  document.getElementById('key-overlay-right').src="images/keyboard/(W)ASD.png";
-  // test for the player holding down the key
-  // setTimeout(alert('test for condtions') , 2400);
-  for (var i = 0; i < 100; i++) {
-    setTimeout(test_for , 2400 + i*10);
-  }
-
-  var passed = false;
-  function test_for(){
-    if(w_down == true && i_down == true && passed == false){
-      sequence_1_part3();
-      passed = true;
-    }
-  }
-}
-
-function sequence_1_part3(){
-  console.log('You won part 2');
-  animate('sequence1', 11, 14, 400);
-  animate_left_circle(4)
-  document.getElementById('key-overlay-left').src="images/keyboard/WA(S)D.png";
-  animate_right_circle(4);
-  document.getElementById('key-overlay-right').src="images/keyboard/WA(S)D.png";
-  // test for the player holding down the key
-  // setTimeout(alert('test for condtions') , 200);
-  for (var i = 0; i < 100; i++) {
-    setTimeout(test_for , 200 + i*10);
-  }
-
-  var passed = false;
-  function test_for(){
-    if(s_down == true && k_down == true && passed == false){
-      sequence_1_part4();
-      passed = true;
-    }
-  }
-}
-
-function sequence_1_part4(){
-  console.log('You won part 3');
-  animate('sequence1', 14, 19, 400);
-}
-
-// function to play animations on the images
-function animate (animation, start, end, timing){
-  // declare variable to store random number in
-  var n;
-  //start for loop
-  for(var i=start; i <= end; i++){
-    // set a small delay between each frame change
-    setTimeout(
-      (function(j){
-        return function(){
-          document.getElementById('game-frame1').src="images/"+ animation + '/' + j + ".png";
+        // if you can move into the square then do so
+        if(col.classList == ''){
+          player.id = '';
+          col.id = 'player';
         }
-      })(i), (i * timing)
-    );
+      break;
+      // case for space
+      case 32:
+        console.log('You pressed space');
+      break;
+    }
   }
-}
+)
 
-// function to add functionality to the timing system
-// displays a circle which visually shows when the key must be held down in order to pass
-function animate_left_circle(timing){
-  // set element to be visible
-  document.getElementById('circle-left-animate').style.visibility ='visible';
-  document.getElementById('circle-left-animate').style.opacity = 1;
-  //start for loop
-  for(var i=50; i >= 0; i--){
-    // set a small delay between each frame change
-    setTimeout(
-      (function(j){
-        return function(){
-          // adjusting size
-          document.getElementById('circle-left-animate').style.width =(j*2/100 * 300) + "px";
-
-          // opactiy adjustments
-          document.getElementById('circle-left-animate').style.opacity =-1*(j-100)*2;
-
-          // image marker adjustments
-          var width = document.getElementById('circle-left-animate').clientWidth;
-          var height = document.getElementById('circle-left-animate').clientHeight;
-          document.getElementById('circle-left-animate').style.marginLeft = -1 * width/2 + "px";
-          document.getElementById('circle-left-animate').style.marginTop = -1 * height/2 + "px";
-        }
-      })(i), (-1*(i-100) * timing)
-    );
-  }
-  // set element to be invisible again
-  document.getElementById('circle-left-animate').style.width = 'hidden';
-}
-
-function animate_right_circle(timing){
-  // set element to be visible
-  document.getElementById('circle-right-animate').style.visibility ='visible';
-  document.getElementById('circle-right-animate').style.opacity = 1;
-  //start for loop
-  for(var i=50; i >= 0; i--){
-    // set a small delay between each frame change
-    setTimeout(
-      (function(j){
-        return function(){
-          // adjusting size
-          document.getElementById('circle-right-animate').style.width =(j*2/100 * 300) + "px";
-
-          // opactiy adjustments
-          document.getElementById('circle-right-animate').style.opacity =-1*(j-100)*2;
-
-          // image marker adjustments
-          var width = document.getElementById('circle-right-animate').clientWidth;
-          var height = document.getElementById('circle-right-animate').clientHeight;
-          document.getElementById('circle-right-animate').style.marginLeft = -1 * width/2 + "px";
-          document.getElementById('circle-right-animate').style.marginTop = -1 * height/2 + "px";
-        }
-      })(i), (-1*(i-100) * timing)
-    );
-  }
-  // set element to be invisible again
-  document.getElementById('circle-right-animate').style.width = 'hidden';
-}
+// run the game
+gameLoop();
+playTheme();
