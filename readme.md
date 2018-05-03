@@ -10,4 +10,6 @@ The game is structured by running the a specified function for each sequence whi
 
 -------------------
 
-All code is written by myself, Sykander Gul, and also all images will be drawn by myself. At the moment, all the images in the game are stock images from google which will be replaced at a later date.
+All code is written by myself, Sykander Gul, and also all images will be drawn by myself.
+
+Music is credited to [SonicWave1000](https://www.youtube.com/user/Sonicwave1000).
