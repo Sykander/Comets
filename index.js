@@ -1,19 +1,3 @@
-// function to add an event listener to the whole page for key presses
-var addEvent = document.addEventListener ? function(target,type,action){
-    if(target){
-        target.addEventListener(type, action, false);
-    }
-} : function(target,type,action){
-    if(target){
-        target.attachEvent('on' + type, action, false);
-    }
-}
-
-function playTheme(){
-  var audio = new Audio('music/game_theme.flac');
-  audio.play();
-}
-
 // internal game array
 var board = new Array(10);
 for (var i = 0; i < board.length; i++) {
@@ -42,11 +26,12 @@ function resetFunction(){
   row[5].id = 'player';
   // reset page
   document.getElementById('message').innerHTML = '';
+  document.getElementById('menu').innerHTML = '';
   reset = true;
 }
 
 // global variables
-var score_count = 0, player_alive=true,chance = 0.1, difficulty = 0, reset= false;
+var score_count = 0, player_alive=true,chance = 0.1, difficulty = 0, reset= false, paused = false, fireball_recharge = 0;
 
 // new game
 function newGame(){
@@ -64,17 +49,18 @@ function gameLoop(){
     drawToArray();
     checkForDeath();
     updateScore();
+    raiseFireballs();
     dropBlocks();
     drawToPage();
     incrementDificulty();
-    setTimeout(gameLoop, 300 - difficulty*150);
+    setTimeout(gameLoop, 300 - difficulty*100);
   }
 }
 
 // increments difficulty whilst never surpassing 1
 function incrementDificulty(){
   difficulty = difficulty + (1-difficulty)/1000;
-  chance = chance + (0.15-chance)/1000;
+  chance = chance + (0.2-chance)/2000;
 }
 
 // function to check if the player is about to die
@@ -87,6 +73,7 @@ function checkForDeath(){
   else {
     // end game
     document.getElementById('message').innerHTML = 'YOU DIED';
+    document.getElementById('menu').innerHTML = 'MENU';
     player_alive = false;
   }
 }
@@ -96,13 +83,39 @@ function updateScore(){
   // get new score
   for (var i = 0; i < board.length; i++) {
     if (board[9][i] == 1) {
+      // increase the score
       score_count++;
+      // if the fireball function needs recharging then recharge it here
+      if(fireball_recharge>0){
+        fireball_recharge--;
+      }
     }
   }
 
   // display the new score
   var score_display = document.getElementById('score_display');
   score_display.innerHTML = score_count;
+}
+
+// function to raise fireballs up the screen
+function raiseFireballs(){
+  // clear top row
+  for (var i = 0; i < board.length; i++) {
+    if (board[0][i] == 2) {
+      board[0][i] = 0;
+    }
+  }
+  // raise each fireball
+  for (var i = 1; i < board.length ; i++) {
+    for (var j = 0; j < board.length; j++) {
+      if (board[i][j]==2) {
+        console.log('working');
+        board[i-1][j] = 2;
+        board[i][j] = 0;
+        drawToPage();
+      }
+    }
+  }
 }
 
 // draws the page to the board array
@@ -118,11 +131,17 @@ function drawToArray(){
   for (var i = 0; i < table.length; i++) {
     var row = table[i].children;
     for (var j = 0; j < row.length; j++) {
+      // if the board contains a block
       if (row[j].classList.contains('block') ) {
         board[i][j] = 1;
       }
+      // if the board contains a player
       if (row[j].id == 'player') {
         board[i][j] = 10;
+      }
+      // if the board contains a fireball
+      if(row[j].classList.contains('fireball')){
+        board[i][j] = 2;
       }
     }
   }
@@ -137,9 +156,8 @@ function drawToPage(){
   for (var i = 0; i < board.length; i++) {
     var row = table[i].children;
     for (var j = 0; j < row.length; j++) {
-      // console.log(table[i].rowIndex + " " + row[j].cellIndex);
       row[j].classList.remove('block');
-      // console.log(row[i].classList);
+      row[j].classList.remove('fireball');
       row[j].id = '';
     }
   }
@@ -147,14 +165,16 @@ function drawToPage(){
   // draw to the page
   // for all rows
   for (var i = 0; i < board.length; i++) {
-    // console.log('row ' + i);
     var row = table[i].children;
     // for all columns
     for (var j = 0; j < row.length; j++) {
       // if it contains a block
       if(board[i][j] == 1){
-        // console.log(table[i].rowIndex + " " + row[j].cellIndex);
         row[j].classList.add('block');
+      }
+      // if it contains a fireball
+      if (board[i][j] == 2) {
+        row[j].classList.add('fireball');
       }
       // if it contains the player
       if (board[i][j] == 10) {
@@ -178,7 +198,12 @@ function dropBlocks(){
   for (var i = board.length-2; i >=0 ; i--) {
     for (var j = 0; j < board.length; j++) {
       if (board[i][j]==1) {
-        board[i+1][j] = 1;
+        if(board[i+1][j] == 2){
+          board[i+1][j] = 0;
+        }
+        else {
+          board[i+1][j] = 1;
+        }
         board[i][j] = 0;
       }
     }
@@ -193,17 +218,25 @@ function dropBlocks(){
   }
 }
 
+// function to add an event listener to the whole page for key presses
+var addEvent = document.addEventListener ? function(target,type,action){
+    if(target){
+        target.addEventListener(type, action, false);
+    }
+} : function(target,type,action){
+    if(target){
+        target.attachEvent('on' + type, action, false);
+    }
+}
+
 // add functionality for each key pressed (key down and key up)
 addEvent(document,'keydown',function(e) {
     e = e || window.event;
     var key = e.which || e.keyCode;
-    // console.log(key);
-    // console.log(e);
     // switch case for which key was pressed
     switch (key) {
       // case for W
       case 87:
-        console.log('You pressed W');
         // getting player coordinates and adjusting them
         var player = document.getElementById('player');
         var x = player.cellIndex;
@@ -213,21 +246,17 @@ addEvent(document,'keydown',function(e) {
 
         // get new coordinates
         var table = document.getElementById('game-frame').children;
-        console.log(table);
         var row = table[0].children[y].children;
-        console.log(row);
         var col = row[x];
 
         // if you can move into the square then do so
-        if(col.classList == ''){
+        if(col.classList == '' && paused == false){
           player.id = '';
           col.id = 'player';
         }
         break;
       // case for A
       case 65:
-        console.log('You pressed A');
-
         // getting player coordinates and adjusting them
         var player = document.getElementById('player');
         var x = player.cellIndex;
@@ -237,21 +266,17 @@ addEvent(document,'keydown',function(e) {
 
         // get new coordinates
         var table = document.getElementById('game-frame').children;
-        console.log(table);
         var row = table[0].children[y].children;
-        console.log(row);
         var col = row[x];
 
         // if you can move into the square then do so
-        if(col.classList == ''){
+        if(col.classList == '' && paused ==false){
           player.id = '';
           col.id = 'player';
         }
         break;
       // case for S
       case 83:
-        console.log('You pressed S');
-
         // getting player coordinates and adjusting them
         var player = document.getElementById('player');
         var x = player.cellIndex;
@@ -261,21 +286,17 @@ addEvent(document,'keydown',function(e) {
 
         // get new coordinates
         var table = document.getElementById('game-frame').children;
-        console.log(table);
         var row = table[0].children[y].children;
-        console.log(row);
         var col = row[x];
 
         // if you can move into the square then do so
-        if(col.classList == ''){
+        if(col.classList == '' && paused == false){
           player.id = '';
           col.id = 'player';
         }
       break;
       // case for D
       case 68:
-        console.log('You pressed D');
-
         // getting player coordinates and adjusting them
         var player = document.getElementById('player');
         var x = player.cellIndex;
@@ -285,25 +306,61 @@ addEvent(document,'keydown',function(e) {
 
         // get new coordinates
         var table = document.getElementById('game-frame').children;
-        console.log(table);
         var row = table[0].children[y].children;
-        console.log(row);
         var col = row[x];
 
         // if you can move into the square then do so
-        if(col.classList == ''){
+        if(col.classList == '' && paused == false){
           player.id = '';
           col.id = 'player';
         }
       break;
       // case for space
       case 32:
-        console.log('You pressed space');
+      // if the player isn't shooting a fireball, is alive and has recharged their fireball timer
+        if(paused == false && player_alive == true && fireball_recharge == 0){
+          var player = document.getElementById('player');
+          var x = player.cellIndex;
+          var y = player.parentElement.rowIndex;
+
+          // adjust coordinates and set movement to paused
+          y = y-1;
+          paused = true;
+          setTimeout(unpause, 100);
+
+          // function to unpause the pause on movement
+          function unpause(){
+            paused = false;
+          }
+
+          // get the cell above the player
+          var table = document.getElementById('game-frame').children;
+          var row = table[0].children[y].children;
+          var col = row[x];
+
+          shootFireball();
+          // function to shoot fireball
+          function shootFireball(){
+            if(col.classList == ''){
+              col.classList.add('fireball');
+              board[y][x] = 2;
+              // set the fireball recharge to 20
+              fireball_recharge=20;
+            }
+          }
+        }
       break;
     }
   }
 )
 
+// function to play the game theme
+function playTheme(){
+  var audio = new Audio('music/game_theme.flac');
+  audio.play();
+}
+
 // run the game
-gameLoop();
+resetFunction();
+newGame();
 playTheme();

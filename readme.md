@@ -1,15 +1,15 @@
 # Reaction Game
 
-The game is built using html, css and javascript. The aim of the game is to progress through each sequence by hitting the appropriate keyboard key, when prompted by the on screen key display.
+The game is built using html, css and javascript. The aim of the game is to last as long as possible without being hit by any of the falling comets.
 
-The timing of the key press will be expressed to you by the collapsing circle around the displayed key. The aim of the game is to continue through each sequence without failing to hit the correct keys, the timing will progressively get harder and harder the more sequences you go through. If you fail to hit a key at any point in the game then you will be diverted into a death animation and the game is over.
+For each comet you successfully avoid, your score will increase by 1, however the overall game difficulty increases as the score increases.
 
-# structure
+# Structure
 
-The game is structured by running the a specified function for each sequence which will then test for the input at each relevant stage of the animation. The game is also constantly running functions to determine if a key is being held down, if your key is held down during the window where the decision is made then you will pass the condition, otherwise it counts as a fail.
+The game is structured fairly simply, there is a 10 by 10 table with each cell of the table containing the appropriate sprite image. The cell classes are edited on a regular cycle to move the sprites around. 
 
 -------------------
 
-All code is written by myself, Sykander Gul, and also all images will be drawn by myself.
+All code is written by myself Sykander Gul, images and sprites were sourced from copyright free sites.
 
 Music is credited to [SonicWave1000](https://www.youtube.com/user/Sonicwave1000).
