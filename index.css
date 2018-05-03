@@ -8,6 +8,10 @@ body {
   font-family: impact;
 }
 
+.title {
+  font-size: 55px;
+}
+
 th.block {
    content:url(images/comet-ms-still.gif);
    padding: 0px;

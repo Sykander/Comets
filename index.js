@@ -16,8 +16,12 @@ function resetFunction(){
   }
   // reset game board
   drawToPage();
-  score_count =0;
+  score_count = 0;
+  chance = 0.1;
   difficulty = 0;
+  paused = false;
+  fireball_recharge = 0;
+
   // place 10 in the board to represent the player
   board[9][5].id = '10';
   // draw the player to the table
@@ -31,13 +35,14 @@ function resetFunction(){
 }
 
 // global variables
-var score_count = 0, player_alive=true,chance = 0.1, difficulty = 0, reset= false, paused = false, fireball_recharge = 0;
+var score_count = 0, player_alive=true,chance = 0.1, difficulty = 0, reset= false, paused = false, fireball_recharge = 0, recharge_time = 50;
 
 // new game
 function newGame(){
   // start a new game only if the game has just been reset
   if(reset == true){
     player_alive = true;
+    recharge_time = 50;
     gameLoop();
     reset = false;
   }
@@ -50,17 +55,27 @@ function gameLoop(){
     checkForDeath();
     updateScore();
     raiseFireballs();
+    // small chance of having a complete wall of comets
+    // this will automatically refill your fireball recharge so you have a chance to make it through
+    // if you had already used your fireball and it was recharging
+    if(0.01> Math.random()){
+      // spawn in new blocks
+      for (var i = 0; i < board.length; i++) {
+        board[0][i] = 1;
+        fireball_recharge = 0;
+      }
+    }
     dropBlocks();
     drawToPage();
     incrementDificulty();
-    setTimeout(gameLoop, 300 - difficulty*100);
+    setTimeout(gameLoop, 200 - difficulty*100);
   }
 }
 
 // increments difficulty whilst never surpassing 1
 function incrementDificulty(){
-  difficulty = difficulty + (1-difficulty)/1000;
-  chance = chance + (0.2-chance)/2000;
+  difficulty = difficulty + (1-difficulty)/2000;
+  chance = chance + (0.5-chance)/2000;
 }
 
 // function to check if the player is about to die
@@ -109,7 +124,6 @@ function raiseFireballs(){
   for (var i = 1; i < board.length ; i++) {
     for (var j = 0; j < board.length; j++) {
       if (board[i][j]==2) {
-        console.log('working');
         board[i-1][j] = 2;
         board[i][j] = 0;
         drawToPage();
@@ -199,7 +213,7 @@ function dropBlocks(){
     for (var j = 0; j < board.length; j++) {
       if (board[i][j]==1) {
         if(board[i+1][j] == 2){
-          board[i+1][j] = 0;
+          board[i+1][j] = 2;
         }
         else {
           board[i+1][j] = 1;
@@ -231,6 +245,7 @@ var addEvent = document.addEventListener ? function(target,type,action){
 
 // add functionality for each key pressed (key down and key up)
 addEvent(document,'keydown',function(e) {
+    // grab the event
     e = e || window.event;
     var key = e.which || e.keyCode;
     // switch case for which key was pressed
@@ -338,6 +353,7 @@ addEvent(document,'keydown',function(e) {
           var row = table[0].children[y].children;
           var col = row[x];
 
+          // function which shoots the fireball
           shootFireball();
           // function to shoot fireball
           function shootFireball(){
@@ -345,7 +361,7 @@ addEvent(document,'keydown',function(e) {
               col.classList.add('fireball');
               board[y][x] = 2;
               // set the fireball recharge to 20
-              fireball_recharge=20;
+              fireball_recharge= recharge_time;
             }
           }
         }
