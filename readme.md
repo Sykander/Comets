@@ -10,6 +10,7 @@ At the beginning of the game, comets fall at one row per 0.28 seconds, however t
 
 The game is structured fairly simply, there is a 10 by 10 table with each cell of the table containing the appropriate sprite image. The cell classes are edited on a regular cycle to move the sprites around.
 
+![game screenshot](https://github.com/Sykander/sparta-global-Comets/blob/dev/images/game-screenshot.png?raw=true)
 -------------------
 
 All code is written by myself Sykander Gul, images and sprites were sourced from copyright free sites.
