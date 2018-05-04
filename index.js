@@ -114,10 +114,15 @@ function gameLoop(){
         fireball_recharge = 0;
       }
     }
+    // drop blocks down the page
+    // and spawn new blocks at the top
     dropBlocks();
+    // draw the contents of the game array to the screen now
     drawToPage();
+    // increase the difficulty level
     incrementDifficulty();
-    setTimeout(gameLoop, 230 - difficulty*60);
+    // after some amount of time call this loop again
+    setTimeout(gameLoop, 280 - difficulty*100);
   }
 }
 
@@ -177,7 +182,7 @@ function updateScore(){
       score_count++;
       // if the fireball function needs recharging then recharge it here
       if(fireball_recharge>0){
-        score_display.style.color ='red';
+        score_display.style.color ='#824dff';
         fireball_recharge--;
       }
       if (fireball_recharge == 0) {
@@ -280,11 +285,11 @@ function drawToPage(){
 // increments difficulty and chance
 function  incrementDifficulty(){
   // this determines how fast the game gets more difficulty
-  var difficulty_rate = Math.random()*1000;
+  var difficulty_rate = 200;
   // increment equations
   difficulty = difficulty + (1-difficulty)/difficulty_rate;
   // this determines the upper limit on the values of chance
-  var chance_max = 0.2;
+  var chance_max = 0.3;
   chance = chance + (chance_max-chance)/difficulty_rate;
 }
 
