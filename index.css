@@ -45,6 +45,13 @@ th.block {
   border-color: white;
 }
 
+.large-comet {
+  content:url(images/comet-ms-still-large.png);
+  padding: 0px;
+  background-color: transparent;
+  display: inline-block;
+}
+
 th, td {
   content:url(images/empty-still.gif);
   display: inline-block;

@@ -122,7 +122,7 @@ function gameLoop(){
     // increase the difficulty level
     incrementDifficulty();
     // after some amount of time call this loop again
-    setTimeout(gameLoop, 280 - difficulty*100);
+    setTimeout(gameLoop, 280 - difficulty*180);
   }
 }
 
@@ -151,6 +151,10 @@ function drawToArray(){
       if(row[j].classList.contains('fireball')){
         board[i][j] = 2;
       }
+      // if the board contains a large comet
+      if(row[j].classList.contains('large-comet')){
+        board[i][j] = 3;
+      }
     }
   }
 }
@@ -177,7 +181,7 @@ function updateScore(){
 
   // get new score
   for (var i = 0; i < board.length; i++) {
-    if (board[9][i] == 1) {
+    if (board[9][i] == 1 || board[9][i] == 3) {
       // increase the score
       score_count++;
       // if the fireball function needs recharging then recharge it here
@@ -206,8 +210,13 @@ function raiseFireballs(){
   for (var i = 1; i < board.length ; i++) {
     for (var j = 0; j < board.length; j++) {
       if (board[i][j]==2) {
-        board[i-1][j] = 2;
-        board[i][j] = 0;
+        if(board[i-1][j] == 3){
+          board[i][j] = 0;
+        }
+        else{
+          board[i-1][j] = 2;
+          board[i][j] = 0;
+        }
         drawToPage();
       }
     }
@@ -218,7 +227,12 @@ function raiseFireballs(){
 function dropBlocks(){
   // clear bottom row
   for (var i = 0; i < board.length; i++) {
+    // case for small comets
     if (board[9][i] == 1) {
+      board[9][i] = 0;
+    }
+    // case for large comets
+    if(board[9][i] == 3){
       board[9][i] = 0;
     }
   }
@@ -226,12 +240,26 @@ function dropBlocks(){
   // drop old blocks
   for (var i = board.length-2; i >=0 ; i--) {
     for (var j = 0; j < board.length; j++) {
+      // case for small comets
       if (board[i][j]==1) {
+        // if dropping into a fireball then leave it as a fireball
         if(board[i+1][j] == 2){
-          board[i+1][j] = 2;
+          // do nothing
         }
         else {
           board[i+1][j] = 1;
+        }
+        board[i][j] = 0;
+      }
+      // case for large comets
+      if(board[i][j] == 3){
+        if(board[i+1][j] == 2){
+          board[i+1][j] = 3;
+        }
+        else {
+                  debugger;
+          console.log('large comet dropped');
+          board[i+1][j] = 3;
         }
         board[i][j] = 0;
       }
@@ -240,8 +268,13 @@ function dropBlocks(){
   // spawn in new blocks
   for (var i = 0; i < board.length; i++) {
     var n = Math.random();
-    if (n < chance) {
+    if (n < chance*4/5) {
+      console.log('Spawned a small comet');
       board[0][i] = 1;
+    }
+    if(n < chance && chance*4/5 < n){
+      console.log('spawned a large comet');
+      board[0][i] = 3;
     }
   }
 }
@@ -257,6 +290,7 @@ function drawToPage(){
     for (var j = 0; j < row.length; j++) {
       row[j].classList.remove('block');
       row[j].classList.remove('fireball');
+      row[j].classList.remove('large-comet');
       row[j].id = '';
     }
   }
@@ -277,6 +311,11 @@ function drawToPage(){
       // if it contains the player
       if (board[i][j] == 10) {
         row[j].id = 'player';
+      }
+      // if it contains a large-comet
+      if (board[i][j] == 3) {
+        console.log('added a large comet to the display board');
+        row[j].classList.add('large-comet');
       }
     }
   }
@@ -420,7 +459,7 @@ addEvent(document,'keydown',function(e) {
             // function to shoot fireball
             function shootFireball(){
               // this determines how many points to recharge the fireball
-              var recharge_time = 50
+              var recharge_time = 50;
 
               if(col.classList == ''){
                 col.classList.add('fireball');
@@ -439,6 +478,7 @@ addEvent(document,'keydown',function(e) {
 // function to play the game theme
 function playTheme(){
   var audio = new Audio('music/game_theme.flac');
+  audio.volume = 0.1;
   audio.play();
 }
 
