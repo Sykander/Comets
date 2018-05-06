@@ -257,8 +257,6 @@ function dropBlocks(){
           board[i+1][j] = 3;
         }
         else {
-                  debugger;
-          console.log('large comet dropped');
           board[i+1][j] = 3;
         }
         board[i][j] = 0;
@@ -269,11 +267,9 @@ function dropBlocks(){
   for (var i = 0; i < board.length; i++) {
     var n = Math.random();
     if (n < chance*4/5) {
-      console.log('Spawned a small comet');
       board[0][i] = 1;
     }
     if(n < chance && chance*4/5 < n){
-      console.log('spawned a large comet');
       board[0][i] = 3;
     }
   }
@@ -314,7 +310,6 @@ function drawToPage(){
       }
       // if it contains a large-comet
       if (board[i][j] == 3) {
-        console.log('added a large comet to the display board');
         row[j].classList.add('large-comet');
       }
     }
