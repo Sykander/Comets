@@ -39,8 +39,6 @@ function resetFunction(){
   drawToPage();
   // new score
   score_count = 0;
-  // player life
-  player_alive=true;
   // new chance of a comet spawning
   chance = 0.1;
   // new difficulty in terms of speed adjustment
@@ -53,11 +51,11 @@ function resetFunction(){
   paused = false;
 
   // place 10 in the board to represent the player
-  board[9][5].id = '10';
+  board[9][5] = 10;
   // draw the player to the table
-  var table = document.getElementById('game-frame').children[0].children;
+  var table = document.getElementsByClassName('game_frame')[0].children[0].children;
   var row = table[9].children;
-  row[5].id = 'player';
+  row[5].classList.add('player');
 
   // update score_display
   document.getElementById('score_display').innerHTML = '';
@@ -122,7 +120,7 @@ function gameLoop(){
     // increase the difficulty level
     incrementDifficulty();
     // after some amount of time call this loop again
-    setTimeout(gameLoop, 280 - difficulty*180);
+    setTimeout(gameLoop, 280 - difficulty*100);
   }
 }
 
@@ -135,7 +133,7 @@ function drawToArray(){
     }
   }
   // get table from html page and add to array
-  var table = document.getElementById('game-frame').children[0].children;
+  var table = document.getElementsByClassName('game_frame')[0].children[0].children;
   for (var i = 0; i < table.length; i++) {
     var row = table[i].children;
     for (var j = 0; j < row.length; j++) {
@@ -144,7 +142,7 @@ function drawToArray(){
         board[i][j] = 1;
       }
       // if the board contains a player
-      if (row[j].id == 'player') {
+      if (row[j].classList.contains('player')) {
         board[i][j] = 10;
       }
       // if the board contains a fireball
@@ -152,7 +150,7 @@ function drawToArray(){
         board[i][j] = 2;
       }
       // if the board contains a large comet
-      if(row[j].classList.contains('large-comet')){
+      if(row[j].classList.contains('large_comet')){
         board[i][j] = 3;
       }
     }
@@ -162,7 +160,8 @@ function drawToArray(){
 // function to check if the player is about to die
 function checkForDeath(){
   // get player coordinates
-  var player = document.getElementById('player')
+  var player = document.getElementsByClassName('player');
+  player=player[0];
   if(player){
     // do nothing
   }
@@ -278,7 +277,7 @@ function dropBlocks(){
 // draws the board array to the page
 function drawToPage(){
   // get table information
-  var table = document.getElementById('game-frame').children[0].children;
+  var table = document.getElementsByClassName('game_frame')[0].children[0].children;
 
   // clear the page
   for (var i = 0; i < board.length; i++) {
@@ -286,8 +285,8 @@ function drawToPage(){
     for (var j = 0; j < row.length; j++) {
       row[j].classList.remove('block');
       row[j].classList.remove('fireball');
-      row[j].classList.remove('large-comet');
-      row[j].id = '';
+      row[j].classList.remove('large_comet');
+      row[j].classList.remove('player');
     }
   }
   // draw to the page
@@ -306,11 +305,11 @@ function drawToPage(){
       }
       // if it contains the player
       if (board[i][j] == 10) {
-        row[j].id = 'player';
+        row[j].classList.add('player');
       }
-      // if it contains a large-comet
+      // if it contains a large_comet
       if (board[i][j] == 3) {
-        row[j].classList.add('large-comet');
+        row[j].classList.add('large_comet');
       }
     }
   }
@@ -349,103 +348,108 @@ addEvent(document,'keydown',function(e) {
       // case for W
       case 87:
         // getting player coordinates and adjusting them
-        var player = document.getElementById('player');
+        var player = document.getElementsByClassName('player');
+        player = player[0];
         var x = player.cellIndex;
         var y = player.parentElement.rowIndex;
         y--;
         if(y<=1) y = 1;
 
         // get new coordinates
-        var table = document.getElementById('game-frame').children;
+        var table = document.getElementsByClassName('game_frame')[0].children;
         var row = table[0].children[y].children;
         var col = row[x];
 
         // if you can move into the square then do so
         if(col.classList == ''){
-          player.id = '';
-          col.id = 'player';
+          player.classList.remove('player');
+          col.classList.add('player');
         }
       break;
       // case for A
       case 65:
         // getting player coordinates and adjusting them
-        var player = document.getElementById('player');
+        var player = document.getElementsByClassName('player')[0];
         var x = player.cellIndex;
         var y = player.parentElement.rowIndex;
         x--;
         if(x<=0) x = 0;
 
         // get new coordinates
-        var table = document.getElementById('game-frame').children;
+        var table = document.getElementsByClassName('game_frame')[0].children;
         var row = table[0].children[y].children;
         var col = row[x];
 
         // if you can move into the square then do so
         if(col.classList == ''){
-          player.id = '';
-          col.id = 'player';
+          player.classList.remove('player');
+          col.classList.add('player');
         }
         break;
         // case for S
         case 83:
           // getting player coordinates and adjusting them
-          var player = document.getElementById('player');
+          var player = document.getElementsByClassName('player');
+          player = player[0];
           var x = player.cellIndex;
           var y = player.parentElement.rowIndex;
           y++;
           if(y>=9) y = 9;
 
           // get new coordinates
-          var table = document.getElementById('game-frame').children;
+          var table = document.getElementsByClassName('game_frame')[0].children;
           var row = table[0].children[y].children;
           var col = row[x];
 
           // if you can move into the square then do so
           if(col.classList == ''){
-            player.id = '';
-            col.id = 'player';
+            player.classList.remove('player');
+            col.classList.add('player');
           }
         break;
         // case for D
         case 68:
           // getting player coordinates and adjusting them
-          var player = document.getElementById('player');
+          var player = document.getElementsByClassName('player');
+          player = player[0];
           var x = player.cellIndex;
           var y = player.parentElement.rowIndex;
           x++;
           if(x>=9) x = 9;
 
           // get new coordinates
-          var table = document.getElementById('game-frame').children;
+          var table = document.getElementsByClassName('game_frame')[0].children;
           var row = table[0].children[y].children;
           var col = row[x];
 
           // if you can move into the square then do so
           if(col.classList == ''){
-            player.id = '';
-            col.id = 'player';
+            player.classList.remove('player');
+            col.classList.add('player');
           }
         break;
         // case for space
         case 32:
           // if the player isn't shooting a fireball, is alive and has recharged their fireball timer
           if(player_alive == true && fireball_recharge == 0){
-            var player = document.getElementById('player');
+            var player = document.getElementsByClassName('player');
+            player = player[0];
             var x = player.cellIndex;
             var y = player.parentElement.rowIndex;
 
             // adjust coordinates and set movement to paused
             y = y-1;
             paused = true;
-            setTimeout(unpause, 100);
+            setTimeout(unpause, 180);
 
             // function to unpause the pause on movement
             function unpause(){
+              debugger;
               paused = false;
             }
 
             // get the cell above the player
-            var table = document.getElementById('game-frame').children;
+            var table = document.getElementsByClassName('game_frame')[0].children;
             var row = table[0].children[y].children;
             var col = row[x];
 
