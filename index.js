@@ -16,7 +16,7 @@ var chance = 0.1;
 // current difficulty in terms of speed adjustment
 var difficulty = 0;
 // current status of reset
-var reset= false;
+var reset = false;
 // current fireball recharge status
 var fireball_recharge = 0;
 // current player input status (allowed or paused)
@@ -44,7 +44,7 @@ function resetFunction(){
   // new difficulty in terms of speed adjustment
   difficulty = 0;
   // new status of reset
-  reset= false;
+  reset = false;
   // new fireball recharge status
   fireball_recharge = 0;
   // disables the pausing of player input
@@ -65,7 +65,7 @@ function resetFunction(){
   document.getElementById('menu').innerHTML = 'MENU';
   // mark reset as completed
   reset = true;
-
+  // first time loading the page makes the game start automatically
   if(first_load==true){
     first_load = false;
     newGame();
@@ -105,12 +105,19 @@ function gameLoop(){
     // small chance of having a complete wall of comets
     // this will automatically refill your fireball recharge so you have a chance to make it through
     // if you had already used your fireball and it was recharging
-    if(chance/20 > Math.random()){
+    if(chance*chance > Math.random()){
       // spawn in new blocks
       for (var i = 0; i < board.length; i++) {
-        board[0][i] = 1;
-        fireball_recharge = 0;
+        if(chance*chance > Math.random()){
+          // sometimes make them large comets
+          board[0][i] = 3;
+        }else {
+          // otherwise small comets
+          board[0][i] = 1;
+        }
       }
+      // give the player a fireball to get passed
+      fireball_recharge = 0;
     }
     // drop blocks down the page
     // and spawn new blocks at the top
@@ -265,11 +272,13 @@ function dropBlocks(){
   // spawn in new blocks
   for (var i = 0; i < board.length; i++) {
     var n = Math.random();
-    if (n < chance*4/5) {
-      board[0][i] = 1;
-    }
-    if(n < chance && chance*4/5 < n){
+    // case for large comets
+    if (n < chance*chance) {
       board[0][i] = 3;
+    }
+    // case for small comets
+    if(n > chance*chance && n < chance){
+      board[0][i] = 1;
     }
   }
 }
@@ -287,6 +296,9 @@ function drawToPage(){
       row[j].classList.remove('fireball');
       row[j].classList.remove('large_comet');
       row[j].classList.remove('player');
+      row[j].children[0].style.marginLeft = "0px";
+      row[j].children[0].style.marginRight = "0px";
+      row[j].children[0].src = "images/empty-still.gif";
     }
   }
   // draw to the page
@@ -298,18 +310,24 @@ function drawToPage(){
       // if it contains a block
       if(board[i][j] == 1){
         row[j].classList.add('block');
+        row[j].children[0].src = "images/comet-ms-still.gif";
       }
       // if it contains a fireball
       if (board[i][j] == 2) {
         row[j].classList.add('fireball');
+        row[j].children[0].src = "images/blue-fireball-m.gif";
       }
       // if it contains the player
       if (board[i][j] == 10) {
         row[j].classList.add('player');
+        row[j].children[0].src = "images/play-m.gif";
+        row[j].children[0].style.marginLeft = "9px";
+        row[j].children[0].style.marginRight = "9px";
       }
       // if it contains a large_comet
       if (board[i][j] == 3) {
         row[j].classList.add('large_comet');
+        row[j].children[0].src = "images/comet-ms-still-large.png";
       }
     }
   }
@@ -444,7 +462,6 @@ addEvent(document,'keydown',function(e) {
 
             // function to unpause the pause on movement
             function unpause(){
-              debugger;
               paused = false;
             }
 
@@ -481,6 +498,24 @@ function playTheme(){
   audio.play();
 }
 
+// function to preload the images
+function preLoadImages(){
+  var images =
+  [ "images/blue-fireball-m.gif",
+    "images/comet-ms-still-large.png",
+    "images/comet-ms-still.gif",
+    "images/empty-still.gif",
+    "images/play-m.gif"
+  ];
+
+  var img = new Image();
+  for (var i = 0; i < images.length; i++) {
+    img = images[i]
+  }
+}
+
+//  preload the images
+preLoadImages();
 // run the reset on load
 resetFunction();
 // play the theme on load

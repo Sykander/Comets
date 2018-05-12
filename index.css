@@ -13,7 +13,7 @@ body {
 }
 
 .block {
-   content:url(images/comet-ms-still.gif);
+   /* content:url(images/comet-ms-still.gif); */
    padding: 0px;
    background-color: transparent;
    display: inline-block;
@@ -46,24 +46,24 @@ body {
 }
 
 .large_comet {
-  content:url(images/comet-ms-still-large.png);
+  /* content:url(images/comet-ms-still-large.png); */
   padding: 0px;
   background-color: transparent;
   display: inline-block;
 }
 
 th, td {
-  content:url(images/empty-still.gif);
+  /* content:url(images/empty-still.gif); */
   display: inline-block;
 }
 
 .player {
-  content:url(images/play-m.gif);
+  /* content:url(images/play-m.gif); */
   padding: 0px;
   background-color: transparent;
   display: inline-block;
-  margin-left: 9px;
-  margin-right: 9px;
+  /* margin-left: 9px; */
+  /* margin-right: 9px; */
 }
 
 .homepage {
@@ -73,7 +73,7 @@ th, td {
 }
 
 .fireball {
-   content:url(images/blue-fireball-m.gif);
+   /* content:url(images/blue-fireball-m.gif); */
    padding: 0px;
    background-color: transparent;
    display: inline-block;
