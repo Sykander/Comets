@@ -1,21 +1,80 @@
 body {
-  background-color: #dee8f7;
+  background-image: url(images/background.gif);
+  background-size: 100%;
 }
+
+.score_display{
+  color: #4d94ff;
+  font-family: impact;
+}
+
+.title {
+  font-size: 55px;
+}
+
+.block {
+   content:url(images/comet-ms-still.gif);
+   padding: 0px;
+   background-color: transparent;
+   display: inline-block;
+}​
 
 .offscreen {
   padding: 50px;
 }
 
-#game-frame1 {
+.frame {
+  position: relative;
+}
+
+.game_frame {
   width: 100%;
-  height: auto;
+  height: 810px;
+  top: 0;
+  left: 0;
   display: block;
   position: absolute;
 }
 
-#game-frame2 {
-  width: 100%;
-  height: auto;
-  display: block;
-  position: absolute;
+.game_image {
+  max-width: 300px;
+  max-height: 100%;
+  border-radius: 25px;
+  border-style: solid;
+  border-width: 2px;
+  border-color: white;
 }
+
+.large_comet {
+  content:url(images/comet-ms-still-large.png);
+  padding: 0px;
+  background-color: transparent;
+  display: inline-block;
+}
+
+th, td {
+  content:url(images/empty-still.gif);
+  display: inline-block;
+}
+
+.player {
+  content:url(images/play-m.gif);
+  padding: 0px;
+  background-color: transparent;
+  display: inline-block;
+  margin-left: 9px;
+  margin-right: 9px;
+}
+
+.homepage {
+  color: #4d94ff;
+  font-family: impact;
+  font-size: 25px;
+}
+
+.fireball {
+   content:url(images/blue-fireball-m.gif);
+   padding: 0px;
+   background-color: transparent;
+   display: inline-block;
+}​
