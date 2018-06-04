@@ -444,7 +444,6 @@ addEvent(document,'keydown',function(e) {
 
             // function to unpause the pause on movement
             function unpause(){
-              debugger;
               paused = false;
             }
 
