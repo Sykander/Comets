@@ -1,3 +1,5 @@
+# [Home - with instructions](https://rawgit.com/Sykander/sparta-global-Comets/master/home.html)
+
 # [Play](https://rawgit.com/Sykander/sparta-global-Comets/master/index.html)
 
 ## Reaction Game
